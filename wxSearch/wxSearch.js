@@ -52,11 +52,23 @@ class wxSearch {
   }
 
   /**
+   * 添加历史记录（写入存储并更新视图）
+   */
+  addHistorySync(keyword) {
+    var that = this
+    if (that.data.history.length >= that.historyLength) {
+      that.data.history.slice(0, that.historyLength - 1)
+    }
+    that.data.history.unshift(keyword)
+    wx.setStorageSync(that.prefix + 'History', that.data.history)
+    that.setDataSync()
+}
+
+  /**
    * 添加历史记录
    */
   addHistory(keyword) {
     var that = this
-    let history = that.getHistorySync()
     if (that.data.history.length >= that.historyLength) {
       that.data.history.slice(0, that.historyLength - 1)
     }
@@ -81,12 +93,13 @@ class wxSearch {
   }
 
   /**
-   * 删除单个历史记录（写入存储）
+   * 删除单个历史记录（写入存储并更新视图）
    */
   deleteHistorySync(key) {
     var that = this
     that.data.history.splice(history.indexOf(key), 1)
     wx.setStorageSync(that.prefix + 'History', that.data.history)
+    that.setDataSync()
   }
 
   /**
@@ -98,11 +111,13 @@ class wxSearch {
   }
 
   /**
-   * 清空历史记录
+   * 清空历史记录（写入存储并更新视图）
    */
   clearHistorySync() {
     var that = this
     wx.removeStorageSync(that.prefix + 'History')
+    that.data.history = []
+    that.setDataSync()
   }
 
   /**
