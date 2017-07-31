@@ -1,3 +1,7 @@
+/**
+ * 小程序搜索组件
+ * 作者：Bolo Lai <cantonbolo@gmail.com>
+ */
 class wxSearch {
   constructor(params) {
     this.prefix = params['prefix'] || ''
