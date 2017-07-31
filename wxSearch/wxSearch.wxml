@@ -1,0 +1,38 @@
+<template name="wxSearchHistory">
+  <view class="wxSearchHistory">
+    <text class="wxSearchTitle">搜索历史</text>
+    <view wx:if="{{wxSearchData.history[0]}}" class="wxSearchHistoryList">
+      <block wx:for="{{wxSearchData.history}}" wx:key="*this">
+        <view class="wxSearchHistoryItem">
+          <text class="wxSearchHistoryItemText" bindtap="wxSearchKeyTap" data-key="{{item}}">{{item}}</text> 
+          <text class="wxSearchHistoryItemDel" bindtap="wxSearchDeleteKey" data-key="{{item}}" data-key="{{item}}">删除</text>
+        </view>
+      </block>
+      <view class="wxSearchDeleteAllBtn" bindtap="wxSearchDeleteAll">清除历史</view>
+    </view>
+    <view wx:else>
+      <view class="wxSearchHistoryEmpty">搜索历史为空</view>
+    </view>
+  </view>
+</template>
+
+<template name="wxSearchHot">
+  <view class="wxSearchKey">
+    <text class="wxSearchTitle">热门搜索</text>
+    <view class="wxSearchKeyList">
+      <block wx:for="{{wxSearchData.hot}}" wx:key="*this">
+        <view class="wxSearchKeyItem" bindtap="wxSearchKeyTap" data-key="{{item}}">{{item}}</view>
+      </block>
+    </view>
+  </view>
+</template>
+
+<template name="wxSearchSuggest">
+  <view class="wxSearchMindKey">
+    <view class="wxSearchMindKeyList">
+      <block wx:for="{{wxSearchData.suggest}}" wx:key="*this">
+        <view class="wxSearchMindKeyItem" bindtap="wxSearchKeyTap" data-key="{{item}}">{{item}}</view>
+      </block>
+    </view>
+  </view>
+</template>
