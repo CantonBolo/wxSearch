@@ -38,7 +38,7 @@ class wxSearch {
    */
   setKeywordSync(keyword, target) {
     var that = this
-    that.data.keyword = keyword
+    that.setKeyword(keyword)
     that.setDataSync(target)
   }
 
@@ -110,9 +110,9 @@ class wxSearch {
   /**
    * 删除单个历史记录（写入存储并更新视图）
    */
-  deleteHistorySync(key) {
+  deleteHistorySync(keyword) {
     var that = this
-    that.data.history.splice(history.indexOf(key), 1)
+    that.deleteHistory(key)
     wx.setStorageSync(that.prefix + 'History', that.data.history)
     that.setDataSync()
   }
@@ -120,9 +120,9 @@ class wxSearch {
   /**
    * 删除单个历史记录
    */
-  deleteHistory(key) {
+  deleteHistory(keyword) {
     var that = this
-    that.data.history.splice(history.indexOf(key), 1);
+    that.data.history.splice(history.indexOf(keyword), 1);
   }
 
   /**
@@ -132,6 +132,15 @@ class wxSearch {
     var that = this
     wx.removeStorageSync(that.prefix + 'History')
     that.data.history = []
+    that.setDataSync()
+  }
+
+  /**
+   * 设置热门搜索（写入存储并更新视图）
+   */
+  setHotSync(hot) {
+    var that = this
+    that.setHot(hot)
     that.setDataSync()
   }
 
@@ -149,6 +158,15 @@ class wxSearch {
   getHot() {
     var that = this
     return that.data.hot || []
+  }
+
+  /**
+   * 设置关键词预测（写入存储并更新视图）
+   */
+  setSuggestSync(keyword) {
+    var that = this
+    that.setSuggest(keyword)
+    that.setDataSync()
   }
 
   /**
