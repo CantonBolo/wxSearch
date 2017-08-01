@@ -26,6 +26,23 @@ class wxSearch {
   }
 
   /**
+   * 设置关键词
+   */
+  setKeyword(keyword) {
+    var that = this
+    that.data.keyword = keyword
+  }
+
+  /**
+   * 设置关键词
+   */
+  setKeywordSync(keyword, target) {
+    var that = this
+    that.data.keyword = keyword
+    that.setDataSync(target)
+  }
+
+  /**
    * 获取数据
    */
   getData() {
@@ -36,10 +53,11 @@ class wxSearch {
   /**
    * 设置数据，并且同步到视图上
    */
-  setDataSync(target) {
+  setDataSync(data, target) {
     var that = this
+    that.data = data
     target.setData({
-      wxSearchData: that.data
+      wxSearchData: data
     })
   }
 
@@ -54,14 +72,10 @@ class wxSearch {
   /**
    * 添加历史记录（写入存储并更新视图）
    */
-  addHistorySync(keyword) {
+  addHistorySync(keyword, target) {
     var that = this
-    if (that.data.history.length >= that.historyLength) {
-      that.data.history.slice(0, that.historyLength - 1)
-    }
-    that.data.history.unshift(keyword)
-    wx.setStorageSync(that.prefix + 'History', that.data.history)
-    that.setDataSync()
+    that.addHistory(keyword)
+    that.setDataSync(that.data, target)
 }
 
   /**
@@ -70,9 +84,10 @@ class wxSearch {
   addHistory(keyword) {
     var that = this
     if (that.data.history.length >= that.historyLength) {
-      that.data.history.slice(0, that.historyLength - 1)
+      that.data.history = that.data.history.slice(0, that.historyLength - 1)
     }
     that.data.history.unshift(keyword)
+    wx.setStorageSync(that.prefix + 'History', that.data.history)
   }
 
   /**
