@@ -26,11 +26,11 @@ class wxSearch {
   }
 
   /**
-   * 设置关键词
+   * 获取关键词
    */
-  setKeyword(keyword) {
+  getKeyword() {
     var that = this
-    that.data.keyword = keyword
+    return that.data.keyword || ''
   }
 
   /**
@@ -43,6 +43,14 @@ class wxSearch {
   }
 
   /**
+   * 设置关键词
+   */
+  setKeyword(keyword) {
+    var that = this
+    that.data.keyword = keyword
+  }
+
+  /**
    * 获取数据
    */
   getData() {
@@ -51,13 +59,12 @@ class wxSearch {
   }
 
   /**
-   * 设置数据，并且同步到视图上
+   * 把数据同步到视图上
    */
-  setDataSync(data, target) {
+  setDataSync(target) {
     var that = this
-    that.data = data
     target.setData({
-      wxSearchData: data
+      wxSearchData: that.data
     })
   }
 
@@ -75,7 +82,7 @@ class wxSearch {
   addHistorySync(keyword, target) {
     var that = this
     that.addHistory(keyword)
-    that.setDataSync(that.data, target)
+    that.setDataSync(target)
 }
 
   /**
@@ -95,8 +102,7 @@ class wxSearch {
    */
   getHistorySync() {
     var that = this
-    let history = wx.getStorageSync(that.prefix + 'History') || []
-    return history
+    return wx.getStorageSync(that.prefix + 'History') || []
   }
 
   /**
@@ -110,11 +116,11 @@ class wxSearch {
   /**
    * 删除单个历史记录（写入存储并更新视图）
    */
-  deleteHistorySync(keyword) {
+  deleteHistorySync(keyword, target) {
     var that = this
     that.deleteHistory(key)
     wx.setStorageSync(that.prefix + 'History', that.data.history)
-    that.setDataSync()
+    that.setDataSync(target)
   }
 
   /**
@@ -128,20 +134,20 @@ class wxSearch {
   /**
    * 清空历史记录（写入存储并更新视图）
    */
-  clearHistorySync() {
+  clearHistorySync(target) {
     var that = this
     wx.removeStorageSync(that.prefix + 'History')
     that.data.history = []
-    that.setDataSync()
+    that.setDataSync(target)
   }
 
   /**
    * 设置热门搜索（写入存储并更新视图）
    */
-  setHotSync(hot) {
+  setHotSync(hot, target) {
     var that = this
     that.setHot(hot)
-    that.setDataSync()
+    that.setDataSync(target)
   }
 
   /**
@@ -163,16 +169,16 @@ class wxSearch {
   /**
    * 设置关键词预测（写入存储并更新视图）
    */
-  setSuggestSync(keyword) {
+  setSuggestSync(suggest, target) {
     var that = this
-    that.setSuggest(keyword)
-    that.setDataSync()
+    that.setSuggest(suggest)
+    that.setDataSync(target)
   }
 
   /**
    * 设置关键词预测
    */
-  setSuggest(keyword) {
+  setSuggest(suggest) {
     var that = this
     that.data.suggest = suggest
   }
@@ -183,22 +189,6 @@ class wxSearch {
   getSuggest() {
     var that = this
     return that.data.suggest || []
-  }
-
-  /**
-   * 设置关键词
-   */
-  setKeyword(keyword) {
-    var that = this
-    that.data.keyword = keyword
-  }
-
-  /**
-   * 获取关键词
-   */
-  getKeyword() {
-    var that = this
-    return that.data.keyword || ''
   }
 
   extend(defaults, options) {
